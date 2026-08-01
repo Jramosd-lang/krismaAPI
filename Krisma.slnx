@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Core/">
+    <Project Path="Core/Krisma.Domain/Krisma.Domain.csproj" />
+    <Project Path="Krisma.Application/Krisma.Application.csproj" Id="47019c97-26de-4835-8fad-755be4ea7754" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="Krisma.Infraestructure/Krisma.Infraestructure.csproj" Id="ad3fc7a0-56ab-4553-9767-edaf65b635c7" />
+  </Folder>
+  <Folder Name="/API/">
+    <Project Path="Krisma.API/Krisma.API.csproj" Id="b65b7ae8-a912-4b73-907c-c39b471224a6" />
+  </Folder>
+  <Folder Name="/Tests/" />
+</Solution>

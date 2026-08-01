@@ -1,0 +1,7 @@
+@Krisma.API_HostAddress = http://localhost:5223
+
+GET {{Krisma.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
