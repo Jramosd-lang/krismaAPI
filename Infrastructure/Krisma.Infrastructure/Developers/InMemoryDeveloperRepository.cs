@@ -5,6 +5,6 @@ namespace Krisma.Infrastructure.Developers;
 public sealed class InMemoryDeveloperRepository : IDeveloperRepository
 {
     private readonly ConcurrentDictionary<Guid, Developer> _developers = new();
-    public Task<bool> ExistsByGitHubLoginAsync(string gitHubLogin, CancellationToken cancellationToken) => Task.FromResult(_developers.Values.Any(x => string.Equals(x.GitHubLogin, gitHubLogin, StringComparison.OrdinalIgnoreCase)));
+    public Task<bool> ExistsByGitHubUserIdAsync(Guid organizationId, long gitHubUserId, CancellationToken cancellationToken) => Task.FromResult(_developers.Values.Any(x => x.OrganizationId == organizationId && x.GitHubUserId == gitHubUserId));
     public Task AddAsync(Developer developer, CancellationToken cancellationToken) { _developers.TryAdd(developer.Id, developer); return Task.CompletedTask; }
 }

@@ -9,8 +9,12 @@ public class Developer
     private readonly List<TechnologyDeveloper> _technologies = [];
 
     public Guid Id { get; private set; } = Guid.CreateVersion7();
+    public Guid OrganizationId { get; private set; }
+    public Organization? Organization { get; private set; }
     public string Name { get; private set; } = null!;
     public string LastName { get; private set; } = null!;
+    public long GitHubUserId { get; private set; }
+    public string GitHubNodeId { get; private set; } = null!;
     public string GitHubLogin { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
     public Seniority Seniority { get; private set; }
@@ -23,10 +27,13 @@ public class Developer
 
     private Developer() { }
 
-    private Developer(string name, string lastName, string gitHubLogin, Email email, Seniority seniority, DateOnly hireDate, Position position, Department department)
+    private Developer(Guid organizationId, string name, string lastName, long gitHubUserId, string gitHubNodeId, string gitHubLogin, Email email, Seniority seniority, DateOnly hireDate, Position position, Department department)
     {
+        OrganizationId = organizationId;
         Name = name;
         LastName = lastName;
+        GitHubUserId = gitHubUserId;
+        GitHubNodeId = gitHubNodeId;
         GitHubLogin = gitHubLogin;
         Email = email;
         Seniority = seniority;
@@ -35,10 +42,29 @@ public class Developer
         Department = department;
     }
 
-    public static Result<Developer> Create(string name, string lastName, string gitHubLogin, string email, Seniority seniority, DateOnly hireDate, Position position, Department department)
+    public void Activate()
     {
+        IsActive = true;
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
+    }
+
+    public static Result<Developer> Create(Guid organizationId, string name, string lastName, long gitHubUserId, string gitHubNodeId, string gitHubLogin, string email, Seniority seniority, DateOnly hireDate, Position position, Department department)
+    {
+        if (organizationId == Guid.Empty)
+            return Result.Failure<Developer>(new Error("developer.organizationId.required", "Organization ID is required.", ErrorType.Validation));
+
         if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(lastName) || string.IsNullOrWhiteSpace(gitHubLogin))
             return Result.Failure<Developer>(new Error("developer.required", "Name, last name and GitHub login are required.", ErrorType.Validation));
+
+        if (gitHubUserId <= 0)
+            return Result.Failure<Developer>(new Error("developer.githubUserId.invalid", "GitHub user ID must be greater than zero.", ErrorType.Validation));
+
+        if (string.IsNullOrWhiteSpace(gitHubNodeId))
+            return Result.Failure<Developer>(new Error("developer.githubNodeId.required", "GitHub node ID is required.", ErrorType.Validation));
 
         if (!Enum.IsDefined(seniority) || !Enum.IsDefined(position) || !Enum.IsDefined(department))
             return Result.Failure<Developer>(new Error("developer.enum.invalid", "Developer enum value is invalid.", ErrorType.Validation));
@@ -50,6 +76,6 @@ public class Developer
         if (emailResult.IsFailure)
             return Result.Failure<Developer>(emailResult.Error);
 
-        return Result.Success(new Developer(name.Trim(), lastName.Trim(), gitHubLogin.Trim(), emailResult.Value, seniority, hireDate, position, department));
+        return Result.Success(new Developer(organizationId, name.Trim(), lastName.Trim(), gitHubUserId, gitHubNodeId.Trim(), gitHubLogin.Trim(), emailResult.Value, seniority, hireDate, position, department));
     }
 }

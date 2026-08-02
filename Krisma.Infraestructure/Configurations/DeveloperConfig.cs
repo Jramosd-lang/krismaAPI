@@ -17,6 +17,14 @@ internal class DeveloperConfig : IEntityTypeConfiguration<Developer>
             .IsRequired()
             .ValueGeneratedNever();
 
+        builder.Property(prop => prop.OrganizationId)
+            .IsRequired();
+
+        builder.HasOne(prop => prop.Organization)
+            .WithMany(organization => organization.Developers)
+            .HasForeignKey(prop => prop.OrganizationId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.Property(prop => prop.Name)
             .IsRequired()
             .HasMaxLength(50);
@@ -25,11 +33,22 @@ internal class DeveloperConfig : IEntityTypeConfiguration<Developer>
             .IsRequired()
             .HasMaxLength(80);
 
+        builder.Property(prop => prop.GitHubUserId)
+            .IsRequired()
+            .ValueGeneratedNever();
+
+        builder.Property(prop => prop.GitHubNodeId)
+            .IsRequired()
+            .HasMaxLength(100);
+
         builder.Property(prop => prop.GitHubLogin)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasMaxLength(39);
 
-        builder.HasIndex(prop => prop.GitHubLogin)
+        builder.HasIndex(prop => new { prop.OrganizationId, prop.GitHubUserId })
+            .IsUnique();
+
+        builder.HasIndex(prop => new { prop.OrganizationId, prop.GitHubNodeId })
             .IsUnique();
 
         builder.Property(prop => prop.Email)

@@ -39,7 +39,8 @@ Developer *--* Technology (DeveloperTechnology)
 
 Entidades mínimas:
 
-- `Organization`: identidad GitHub, nombre, zona horaria.
+- `Organization`: identidad GitHub, nombre, zona horaria; delimita los datos de developers, equipos y proyectos.
+- `Developer`: pertenece a una organización; conservar `GitHubUserId` y `GitHubNodeId` como identidad externa estable y tratar `GitHubLogin` como dato actualizable.
 - `Team`: organización, nombre. `TeamMembership`: desarrollador, equipo, rol, rango de fechas.
 - `Project`: unidad de negocio; relaciona repositorios. No confundir con repositorio GitHub.
 - `Repository`: `GitHubRepositoryId`, `NodeId`, owner/name, estado de sincronización.

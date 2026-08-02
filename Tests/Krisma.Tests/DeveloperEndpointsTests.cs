@@ -11,8 +11,11 @@ public class DeveloperEndpointsTests(WebApplicationFactory<Program> factory) : I
     {
         var response = await factory.CreateClient().PostAsJsonAsync("/api/developers", new
         {
+            organizationId = Guid.NewGuid(),
             name = "Ada",
             lastName = "Lovelace",
+            gitHubUserId = 1,
+            gitHubNodeId = "MDQ6VXNlcjE=",
             gitHubLogin = "ada-lovelace",
             email = "invalid",
             seniority = 3,

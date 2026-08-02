@@ -28,11 +28,11 @@ if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
 app.MapPost("/api/developers", async (CreateDeveloperRequest request, ISender sender, HttpContext context, CancellationToken cancellationToken) =>
 {
-    var result = await sender.Send(new CreateDeveloperCommand(request.Name, request.LastName, request.GitHubLogin, request.Email, request.Seniority, request.HireDate, request.Position, request.Department), cancellationToken);
+    var result = await sender.Send(new CreateDeveloperCommand(request.OrganizationId, request.Name, request.LastName, request.GitHubUserId, request.GitHubNodeId, request.GitHubLogin, request.Email, request.Seniority, request.HireDate, request.Position, request.Department), cancellationToken);
     return result.IsSuccess ? Results.Created($"/api/developers/{result.Value.Id}", result.Value) : result.Error.ToProblem(context);
 }).WithName("CreateDeveloper");
 
 app.Run();
 
-public sealed record CreateDeveloperRequest(string Name, string LastName, string GitHubLogin, string Email, Seniority Seniority, DateOnly HireDate, Position Position, Department Department);
+public sealed record CreateDeveloperRequest(Guid OrganizationId, string Name, string LastName, long GitHubUserId, string GitHubNodeId, string GitHubLogin, string Email, Seniority Seniority, DateOnly HireDate, Position Position, Department Department);
 public partial class Program;

@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
-using Krisma.Domain.Common;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Krisma.API.Middlewares;
 
@@ -27,27 +27,33 @@ public class HandlerExceptionsMiddleware
 
     private Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError;
-        context.Response.ContentType = "application/json";
+        context.Response.ContentType = "application/problem+json";
 
-        var error = new Error("server.error", exception.Message, ErrorType.Failure);
+        var statusCode = (int)HttpStatusCode.InternalServerError;
+        var title = "server.error";
 
         switch (exception)
         {
             case UnauthorizedAccessException:
-                httpStatusCode = HttpStatusCode.Unauthorized;
-                error = new Error("auth.unauthorized", exception.Message, ErrorType.Validation);
+                statusCode = (int)HttpStatusCode.Unauthorized;
+                title = "auth.unauthorized";
                 break;
             case KeyNotFoundException:
-                httpStatusCode = HttpStatusCode.NotFound;
-                error = new Error("resource.not.found", exception.Message, ErrorType.NotFound);
+                statusCode = (int)HttpStatusCode.NotFound;
+                title = "resource.not.found";
                 break;
         }
 
-        context.Response.StatusCode = (int)httpStatusCode;
+        context.Response.StatusCode = statusCode;
 
-        var response = Result.Failure<object>(error);
-        var json = JsonSerializer.Serialize(response);
+        var problemDetails = new ProblemDetails
+        {
+            Status = statusCode,
+            Title = title,
+            Detail = exception.Message
+        };
+
+        var json = JsonSerializer.Serialize(problemDetails);
 
         return context.Response.WriteAsync(json);
     }

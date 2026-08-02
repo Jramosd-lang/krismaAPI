@@ -18,6 +18,9 @@ public class Organization
     private readonly List<Team> _teams = [];
     public IReadOnlyCollection<Team> Teams => _teams.AsReadOnly();
 
+    private readonly List<Developer> _developers = [];
+    public IReadOnlyCollection<Developer> Developers => _developers.AsReadOnly();
+
     private Organization() { }
 
     private Organization(long gitHubOrganizationId, string gitHubNodeId, string name, string timeZoneId)

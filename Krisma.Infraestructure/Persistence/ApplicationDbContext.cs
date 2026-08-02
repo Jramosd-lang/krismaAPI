@@ -20,6 +20,24 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        modelBuilder.Entity<Organization>(builder =>
+        {
+            builder.HasIndex(organization => organization.GitHubOrganizationId)
+                .IsUnique();
+
+            builder.HasIndex(organization => organization.GitHubNodeId)
+                .IsUnique();
+
+            builder.Property(organization => organization.Name)
+                .HasMaxLength(200);
+
+            builder.Property(organization => organization.GitHubNodeId)
+                .HasMaxLength(100);
+
+            builder.Property(organization => organization.TimeZoneId)
+                .HasMaxLength(100);
+        });
     }
 
 

@@ -11,8 +11,11 @@ public class DeveloperMapper : IDeveloperMapper
     {
         return new DeveloperResponseDto(
             entity.Id,
+            entity.OrganizationId,
             entity.Name,
             entity.LastName,
+            entity.GitHubUserId,
+            entity.GitHubNodeId,
             entity.GitHubLogin,
             entity.Email.Value,
             (int)entity.Seniority,

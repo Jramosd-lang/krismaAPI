@@ -9,5 +9,7 @@
   <Folder Name="/API/">
     <Project Path="Krisma.API/Krisma.API.csproj" Id="b65b7ae8-a912-4b73-907c-c39b471224a6" />
   </Folder>
-  <Folder Name="/Tests/" />
+  <Folder Name="/Tests/">
+    <Project Path="Krisma.Tests/Krisma.Tests.csproj" Id="ac1d5584-ac6f-4057-ac63-acb29c7f6eb9" />
+  </Folder>
 </Solution>

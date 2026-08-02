@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Core\Krisma.Domain\Krisma.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\Organizations\Querys\" />
+  </ItemGroup>
+
 </Project>

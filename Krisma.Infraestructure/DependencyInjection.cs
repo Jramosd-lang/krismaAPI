@@ -14,7 +14,9 @@ public static class DependencyInjection
             options.UseSqlServer("name=DefaultConnection"));
 
 
-        services.AddScoped<IRepositoryDevelopers, RepositoryDevelopers>();
+        services.AddScoped<IDevelopersRepository, DevelopersRepository>();
+        services.AddScoped<IOrganizationsRepository, OrganizationsRepository>();
+
 
         return services;
     }
