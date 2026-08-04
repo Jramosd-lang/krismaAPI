@@ -1,4 +1,4 @@
-using Krisma.Application.Developers;
+using Krisma.Application.UseCases.Developers.Commands.CreateDev;
 using Krisma.Domain.Enums;
 namespace Krisma.Tests;
 public class CreateDeveloperValidatorTests

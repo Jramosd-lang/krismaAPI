@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Krisma.Domain\Krisma.Domain.csproj" />
-    <ProjectReference Include="..\..\Core\Krisma.Application\Krisma.Application.csproj" />
-    <ProjectReference Include="..\..\API\Krisma.Api\Krisma.Api.csproj" />
+    <ProjectReference Include="..\..\Src\Krisma.Domain\Krisma.Domain.csproj" />
+    <ProjectReference Include="..\..\Src\Krisma.Application\Krisma.Application.csproj" />
+    <ProjectReference Include="..\..\Src\Krisma.API\Krisma.API.csproj" />
   </ItemGroup>
 
 </Project>
