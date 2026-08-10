@@ -63,4 +63,13 @@ public class DevelopersRepository(ApplicationDbContext context) : IDevelopersRep
 
         return developers;
     }
+
+    public async Task UpdateDeveloper(Developer developer)
+    {
+        var existingDeveloper = context.Developers.Find(developer.Id);
+
+        if (existingDeveloper != null) { 
+            context.Developers.Update(existingDeveloper);
+        }
+    }
 }

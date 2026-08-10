@@ -14,5 +14,6 @@ public interface IDevelopersRepository
     Task DeactivateDeveloper(Guid id);
     Task ActivateDeveloper(Guid id);
     Task<List<Developer>> GetByOrganizationId(Guid organizationId);
+    Task UpdateDeveloper(Developer developer);
 
 }

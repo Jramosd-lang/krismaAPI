@@ -15,7 +15,6 @@ public class GetDevelopersByOrganizationQueryHandler(
 {
     public async Task<Result<List<DeveloperResponseDto>>> Handle(GetDevelopersByOrganizationQuery request, CancellationToken cancellationToken)
     {
-
         var developers = await developerRepository.GetByOrganizationId(request.OrganizationId);
 
         if (developers is null || !developers.Any())
@@ -23,7 +22,7 @@ public class GetDevelopersByOrganizationQueryHandler(
             return Result.Success(new List<DeveloperResponseDto>());
         }
 
-        var developerDtos = developerMapper.ToDtoList(developers);
+        var developerDtos = developerMapper.ToDtoList(developers) ?? [];
 
         return Result.Success(developerDtos);
     }

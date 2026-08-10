@@ -1,12 +1,14 @@
-using System;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace Krisma.Application.UseCases.Developers.Commands.CreateDev;
+namespace Krisma.Application.UseCases.Developers.Commands.UpdateDev;
 
-public sealed class CreateDeveloperValidator : AbstractValidator<CreateDeveloperCommand>
+public class UpdateDeveloperCommandValidator : AbstractValidator<UpdateDeveloperCommand>
 {
-    public CreateDeveloperValidator()
+    public UpdateDeveloperCommandValidator()
     {
+        RuleFor(x => x.Id)
+            .NotEmpty().WithMessage("El Id del desarrollador es obligatorio.");
+
         RuleFor(x => x.OrganizationId)
             .NotEmpty().WithMessage("El Id de la organización es obligatorio.");
 

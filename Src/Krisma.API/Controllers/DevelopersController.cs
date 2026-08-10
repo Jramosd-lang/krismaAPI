@@ -1,6 +1,7 @@
 ﻿using Krisma.Application.UseCases.Developers.Commands.ActivateDev;
 using Krisma.Application.UseCases.Developers.Commands.CreateDev;
 using Krisma.Application.UseCases.Developers.Commands.DeactivateDev;
+using Krisma.Application.UseCases.Developers.Commands.UpdateDev;
 using Krisma.Application.UseCases.Developers.Queries.GetDeveloperById;
 using Krisma.Application.UseCases.Developers.Queries.GetDevelopersByOrganization;
 using MediatR;
@@ -46,7 +47,7 @@ public class DevelopersController : ApiControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateDeveloperDto model)
+    public async Task<IActionResult> Create([FromBody] CreateDeveloperCommand model)
     {
         CreateDeveloperCommand command = new(
             model.OrganizationId,
@@ -69,8 +70,20 @@ public class DevelopersController : ApiControllerBase
             return HandleFailure(result);
         }
 
-        return Ok(result.Value);
+        return CreatedAtAction(nameof(Create), new { id = result.Value }, new { id = result.Value });
     }
+
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] UpdateDeveloperCommand model)
+    {
+        var result = await Mediator.Send(model);
+        if (result.IsFailure)
+        {
+            return HandleFailure(result);
+        }
+        return NoContent();
+    }
+
 
     [HttpPut("{id:guid}/deactivate")]
     public async Task<IActionResult> Deactivate(Guid id)

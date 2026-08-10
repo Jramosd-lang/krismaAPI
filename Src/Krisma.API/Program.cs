@@ -2,19 +2,25 @@ using Krisma.API.Middlewares;
 using Krisma.Application;
 using Krisma.Infraestructure;
 using Scalar.AspNetCore;
-using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddApplication();
-builder.Services.AddControllers();
+// Aqui se añaden los servicios de la aplicación, infraestructura y controladores al contenedor de inyección de dependencias
+
+builder.Services.AddApplication()
+                .AddInfrastructure()
+                .AddControllers();
+
+// OpenAPI nativo moderno
+
 builder.Services.AddOpenApi();
-builder.Services.AddInfrastructure();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
-app.UseHandlerExceptionsMiddleware();
+// Middleware global de manejo de excepciones al inicio del pipeline
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
@@ -22,24 +28,13 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference(options =>
         options.WithOpenApiRoutePattern("/openapi/{documentName}.json"));
 
-    var url = app.Urls.FirstOrDefault() ?? "http://localhost:5223";
-    try
-    {
-        Process.Start(new ProcessStartInfo
-        {
-            FileName = $"{url}/scalar/v1",
-            UseShellExecute = true
-        });
-    }
-    catch (Exception)
-    {
-        // Ignorar si el entorno no permite abrir interfaces gráficas
-    }
+    // NOTA: Se removió Process.Start por buenas prácticas en contenedores/Linux.
 }
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
 app.Run();
 
 public partial class Program;

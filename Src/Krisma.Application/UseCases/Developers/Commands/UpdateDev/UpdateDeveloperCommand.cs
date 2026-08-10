@@ -1,8 +1,11 @@
-﻿using Krisma.Domain.Enums;
+﻿using Krisma.Domain.Common;
+using Krisma.Domain.Enums;
+using MediatR;
 
-namespace Krisma.Application.UseCases.Developers.Commands.CreateDev;
+namespace Krisma.Application.UseCases.Developers.Commands.UpdateDev;
 
-public sealed record CreateDeveloperDto(
+public record UpdateDeveloperCommand(
+    Guid Id,
     Guid OrganizationId,
     string Name,
     string LastName,
@@ -14,4 +17,4 @@ public sealed record CreateDeveloperDto(
     DateOnly HireDate,
     Position Position,
     Department Department
-);
+) : IRequest<Result<Guid>>;
