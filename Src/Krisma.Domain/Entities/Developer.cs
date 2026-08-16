@@ -78,4 +78,42 @@ public class Developer
 
         return Result.Success(new Developer(organizationId, name.Trim(), lastName.Trim(), gitHubUserId, gitHubNodeId.Trim(), gitHubLogin.Trim(), emailResult.Value, seniority, hireDate, position, department));
     }
+
+    public Result<Developer> Update(string name, string lastName, long gitHubUserId, string gitHubNodeId, string gitHubLogin, string email, Seniority seniority, DateOnly hireDate, Position position, Department department)
+    {
+        if (OrganizationId == Guid.Empty)
+            return Result.Failure<Developer>(new Error("developer.organizationId.invalid", "Organization ID cannot be empty on update.", ErrorType.Validation));
+
+        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(lastName) || string.IsNullOrWhiteSpace(gitHubLogin))
+            return Result.Failure<Developer>(new Error("developer.required", "Name, last name and GitHub login are required.", ErrorType.Validation));
+
+        if (gitHubUserId <= 0)
+            return Result.Failure<Developer>(new Error("developer.githubUserId.invalid", "GitHub user ID must be greater than zero.", ErrorType.Validation));
+
+        if (string.IsNullOrWhiteSpace(gitHubNodeId))
+            return Result.Failure<Developer>(new Error("developer.githubNodeId.required", "GitHub node ID is required.", ErrorType.Validation));
+
+        if (!Enum.IsDefined(seniority) || !Enum.IsDefined(position) || !Enum.IsDefined(department))
+            return Result.Failure<Developer>(new Error("developer.enum.invalid", "Developer enum value is invalid.", ErrorType.Validation));
+
+        if (hireDate > DateOnly.FromDateTime(DateTime.UtcNow))
+            return Result.Failure<Developer>(new Error("developer.hire-date.future", "Hire date cannot be in the future.", ErrorType.Validation));
+
+        var emailResult = Email.Create(email);
+        if (emailResult.IsFailure)
+            return Result.Failure<Developer>(emailResult.Error);
+
+        Name = name.Trim();
+        LastName = lastName.Trim();
+        GitHubUserId = gitHubUserId;
+        GitHubNodeId = gitHubNodeId.Trim();
+        GitHubLogin = gitHubLogin.Trim();
+        Email = emailResult.Value;
+        Seniority = seniority;
+        HireDate = hireDate;
+        Position = position;
+        Department = department;
+
+        return Result.Success(this);
+    }
 }
